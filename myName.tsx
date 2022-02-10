@@ -7,7 +7,46 @@ const sayHi = (name:string) => {
   return `Hi! my name is ${name}`
 }
 
+const Counter = () =>{
+  const [number,setNumber] = useState(0);
+  const [havingDebt,setHavingDebt] = useState(false);
+  
+  return (
+    <View style={styles.counterContainer}>
+      <Text style={[styles.counterText,number==0 ? styles.black : 
+       (havingDebt ? styles.red : styles.green)]}
+       >   
+       {number.toLocaleString()}
+      </Text>
+      <View style={styles.btnCounterContainer}>
+        <Pressable 
+        style={[styles.btnCounter,styles.paying]}
+        onPress={()=>{
+        if(number <= 0) {setHavingDebt(true)}
+        else {setHavingDebt(false)}
+        setNumber(number-1)
+        }}
+        >
+          <Text>return a slice</Text>
+        </Pressable>
+        <Pressable 
+        style={[styles.btnCounter,styles.taking]}
+        onPress={()=>{
+        if(number >=
+         0){setHavingDebt(false)}
+        else {setHavingDebt(true)}
+        setNumber(number+1)
+        }}
+        >
+          <Text>Eat a slice</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
 //Componente dentro de otro
+
 const Eat = (props:any) => {
   const [isHungry,setIsHungry] = useState(true);
   return (
@@ -34,16 +73,17 @@ const Greetings = (props:any) => {
          Hi! my name is 
          <Text style={{fontWeight: 'bold'}}> {name}</Text>
       </Text>
-      <View style={ haveName ? styles.none : styles.container  }>
+      <View style={!haveName ? styles.nameContainer :   
+       styles.none}>
         <TextInput
           style={styles.inputName}
           placeholder="What is your name?"
           onChangeText={newText=>setName(newText)}
         />
-        <Button 
-          onPress={()=>setIfHaveName(true)}
-          title="That's my name"
-        />
+        <Pressable style={styles.btnHaveName} onPress={()=>setIfHaveName(true)}
+        >
+          <Text style={styles.textSend}>OK</Text>
+        </Pressable>
         
       </View>
     </View>
@@ -56,7 +96,12 @@ const Cat = () =>{
     <View style={styles.container}>
       <Text style={styles.title}>My First App</Text>
       <Greetings name="Anonymous" />
-      <Eat food="Pizza" />
+      <View style={styles.eatSpace}>
+        <Eat food="Pizza" />
+      </View>
+      <View style={styles.counterSpace}>
+        <Counter />
+      </View>
     </View>
   );
 }
@@ -65,7 +110,10 @@ const Cat = () =>{
 //Estilos personalizados
 const styles = StyleSheet.create({
   container: {
-    flex:1
+    flex:1,
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    justifyContent: 'flex-start'
   },
   title: {
     marginTop: 50,
@@ -75,6 +123,37 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: '600',
     color: '#1A8FE3'
+  },
+  eatSpace: {
+    minHeight: 100,
+    margin: 15,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 5,
+    shadowColor: '#171717',
+    shadowOffset: {width: -1, height: 3},
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  nameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flexWrap: 'nowrap',
+    margin: 15,
+    width: '91%',
+    
+  },
+  counterSpace: {
+    height: 130,
+    margin: 15,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 5,
+    paddingBottom: 10,
+    paddingTop: 10,
+    shadowColor: '#171717',
+    shadowOffset: {width: -1, height: 3},
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   question: {
     marginLeft: 15,
@@ -92,11 +171,10 @@ const styles = StyleSheet.create({
   inputName: {
     backgroundColor: '#F8F8F8',
     marginTop: 0,
-    marginLeft: 15,
-    marginRight: 15,
-    padding: 10,
-    borderRadius: 5,
+    marginRight: 0,
+    padding: 15,
     fontSize: 21,
+    width: '80%'
   },
   none: {
     display: 'none'
@@ -111,14 +189,12 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   greetingContainer: {
-    
     width: '100%',
     paddingTop: 0,
     paddingBottom: 20
   },
   eatingContainer: {
     flex: 1,
-    height: '200px',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
@@ -148,7 +224,53 @@ const styles = StyleSheet.create({
   notHungryText: {
     color: 'green',
     fontWeight: '600'
-  }
+  },
+  counterContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  counterText: {
+    fontSize: 52,
+    marginBottom: 20,
+    color: '#666',
+    fontWeight: '600'
+  },
+  btnCounterContainer: {
+    flex:1,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start'
+  },
+  btnCounter: {
+    padding: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
+    borderRadius: 10
+  },
+  textSend: {
+    fontSize: 18,
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  btnHaveName: {
+    width: '15%',
+    padding: 15,
+    backgroundColor: '#1A8FE3',
+    borderRadius: 5
+  },
+  paying: {
+    backgroundColor: '#ffccd5',
+  },
+  taking: {
+    backgroundColor: '#74c69d',
+  },
+  black: {color: '#666666'},
+  red: {color: '#ffccd5'},
+  green: {color: '#74c69d'}
+  
 })
 
 
